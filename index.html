@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LACN - Sistema de Resultados</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #004d99;
+            --secondary: #FFD700;
+            --danger: #d63333;
+            --gray: #6c757d;
+            --light-gray: #f8f9fa;
+            --white: #ffffff;
+            --dark: #343a40;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Card Principal */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+            min-height: 600px;
+        }
+        
+        /* Seção Esquerda - Banner */
+        .card-banner {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-banner::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .card-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+        
+        .logo {
+            margin-bottom: 30px;
+            width: 180px;
+            filter: brightness(0) invert(1);
+        }
+        
+        .banner-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .banner-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .banner-features {
+            text-align: left;
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .feature-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        /* Seção Direita - Conteúdo */
+        .card-content {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .content-header {
+            margin-bottom: 30px;
+        }
+        
+        .content-title {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .content-subtitle {
+            color: var(--gray);
+            font-size: 15px;
+        }
+        
+        /* Formulário */
+        .auth-form {
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 14px;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: var(--light-gray);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+            background-color: var(--white);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 15px;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Resultado do Exame */
+        .exam-result {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .exam-title {
+            font-size: 22px;
+            color: var(--primary);
+        }
+        
+        .exam-id {
+            background: var(--light-gray);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        .patient-info {
+            margin-bottom: 25px;
+        }
+        
+        .info-item {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            min-width: 120px;
+            color: var(--gray);
+        }
+        
+        .result-section {
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        .result-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .result-positive {
+            color: var(--danger);
+            font-weight: 600;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        
+        .signature {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+        }
+        
+        /* Mensagens */
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Responsivo */
+        @media (max-width: 992px) {
+            .card {
+                flex-direction: column;
+            }
+            
+            .card-banner {
+                padding: 30px 20px;
+            }
+            
+            .card-content {
+                padding: 30px;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- Seção Esquerda - Banner -->
+            <div class="card-banner">
+                <img src="https://www.lanac.com.br/wp-content/themes/limonada/assets/ico-01.svg" alt="LACN Logo" class="logo">
+                <h2 class="banner-title">Sistema de Resultados Online</h2>
+                <p class="banner-subtitle">Acesse seus exames de forma rápida e segura</p>
+                
+                <div class="banner-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                            <h4>Segurança</h4>
+                            <p>Dados criptografados e protegidos</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div>
+                            <h4>Rapidez</h4>
+                            <p>Resultados disponíveis imediatamente</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div>
+                            <h4>Precisão</h4>
+                            <p>Laudos médicos confiáveis</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção Direita - Conteúdo -->
+            <div class="card-content">
+                <!-- Formulário de Login -->
+                <div id="loginSection">
+                    <div class="content-header">
+                        <h3 class="content-title">Acessar Resultados</h3>
+                        <p class="content-subtitle">Digite suas credenciais para visualizar seus exames</p>
+                    </div>
+                    
+                    <div class="alert alert-danger" id="errorMsg">
+                        <i class="fas fa-exclamation-circle"></i> Credenciais incorretas. Por favor, tente novamente.
+                    </div>
+                    
+                    <form class="auth-form" id="loginForm">
+                        <div class="form-group">
+                            <label for="username" class="form-label">Nome Completo</label>
+                            <div class="input-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" class="form-control" id="username" placeholder="Digite seu nome completo" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password" class="form-label">Senha</label>
+                            <div class="input-group">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" class="form-control" id="password" placeholder="DD MM AAAA" required>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Acessar Resultado
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Resultado do Exame -->
+                <div class="exam-result" id="resultSection">
+                    <div class="exam-header">
+                        <h3 class="exam-title">Resultado do Exame</h3>
+                        <span class="exam-id">LACN-20240619-9876</span>
+                    </div>
+                    
+                    <div class="patient-info">
+                        <div class="info-item">
+                            <span class="info-label">Paciente:</span>
+                            <span>Thaynara de Lima Javorski</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Nascimento:</span>
+                            <span>05/10/1998</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Data do Exame:</span>
+                            <span>19/06/2024</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Médico:</span>
+                            <span>Dr. Carlos Silva</span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-section">
+                        <h4 class="result-title">Beta-HCG Quantitativo</h4>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Resultado:</span>
+                            <span class="result-positive">POSITIVO</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Valor de Referência:</span>
+                            <span>Negativo: &lt; 5.0 mIU/mL</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Seu Resultado:</span>
+                            <span>1250 mIU/mL</span>
+                        </div>
+                    </div>
+                    
+                    <div class="interpretation">
+                        <h4 class="result-title">Interpretação</h4>
+                        <p>Compatível com gravidez de aproximadamente 5 semanas. O nível de Beta-HCG está dentro da faixa esperada para o período gestacional informado.</p>
+                    </div>
+                    
+                    <div class="signature">
+                        <div class="info-item">
+                            <span class="info-label">Assinatura Digital:</span>
+                            <span>Dr. Carlos Silva - CRM/SP 123456</span>
+                        </div>
+                        <p class="notes">Este laudo foi emitido eletronicamente e dispensa carimbo ou assinatura manual conforme Resolução CFM nº 2.232/2022.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            // Validação exata (case sensitive)
+            if (username === "Thaynara de Lima javorski" && password === "05 10 1998") {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('errorMsg').style.display = 'none';
+                document.getElementById('resultSection').style.display = 'block';
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+                document.getElementById('password').focus();
+            }
+        });
+    </script>
+</body>
+</html>
